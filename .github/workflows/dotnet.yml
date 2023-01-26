@@ -19,10 +19,15 @@ jobs:
       run: dotnet build --no-restore -c release -o .
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Cyclone
+      run: dotnet tool install --global CycloneDx
+    - run: dotnet CycloneDX docgenerator.csproj -j -o .
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-          path: docgenerator.1.0.0.nupkg
+          path:  |
+            docgenerator.1.0.0.nupkg
+            bom.json
           name: DocGenerator
           if-no-files-found: error
           retention-days: 5
